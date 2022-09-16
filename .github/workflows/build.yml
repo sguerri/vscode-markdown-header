@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    tags: ['v[0-9].[0-9]+.[0-9]+']
+
+env:
+  APP_NAME: markdown-header
+  APP_VERSION: "0.0.0"
+  BUILD_TYPE: Release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout current version
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Package extension
+        uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "package"
+#          args: "publish -p $VSCE_TOKEN"
+#        env:
+#          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
+          path: ./${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
+
