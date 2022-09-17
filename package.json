@@ -1,10 +1,10 @@
 {
 	"name": "markdown-header",
 	"displayName": "Markdown Header",
-	"description": "Markdown Header editor",
+	"description": "Markdown YAML header editor",
 	"version": "0.0.7",
 	"publisher": "sguerri",
-	"license": "MIT",
+	"license": "GPLv3",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/sguerri/vscode-markdown-header"
