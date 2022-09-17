@@ -2,7 +2,7 @@
 	"name": "markdown-header",
 	"displayName": "Markdown Header",
 	"description": "Markdown YAML header editor",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"publisher": "sguerri",
 	"license": "GPL-3.0",
 	"repository": {
