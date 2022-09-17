@@ -7,7 +7,7 @@ on:
 env:
   APP_USER: sguerri
   APP_NAME: markdown-header
-  APP_VERSION: "0.0.6"
+  APP_VERSION: "0.0.7"
   BUILD_TYPE: Release
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       - name: Package extension
         uses: lannonbr/vsce-action@3.0.0
         with:
-          args: "package -o ${{APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix"
+          args: "package -o ${{env.APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix"
 #          args: "publish -p $VSCE_TOKEN"
 #        env:
 #          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
@@ -43,5 +43,5 @@ jobs:
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:
-          GHR_PATH: ./${{APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
+          GHR_PATH: ./${{env.APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
