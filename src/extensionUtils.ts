@@ -15,6 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with markdown-header. If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Generate random string
+ * @param length Expected length of returned string
+ * @returns String
+ */
 export function generateId(length: number = 12): string
 {
 	let result = '';
