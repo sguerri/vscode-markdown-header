@@ -17,10 +17,24 @@
 
 import * as vscode from 'vscode';
 
+/**
+ * Automatic refresh of header panel on file modification
+ */
 export let autoRefresh: boolean = false;
+
+/**
+ * Predefined options by header key
+ */
 export let choices: any = {};
+
+/**
+ * When creating a new YAML header, add a random id
+ */
 export let initWithId: boolean = false;
 
+/**
+ * Load settings
+ */
 export function load(): void
 {
 	autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
