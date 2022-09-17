@@ -34,12 +34,6 @@ jobs:
 #        env:
 #          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
-#          path: ./${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
-
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:
