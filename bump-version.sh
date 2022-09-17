@@ -46,7 +46,7 @@ then
     getVersion
     getVersionParts
     updateVersion $1
-    sed -i "s/\"version\" : \"$version/\"version\" : \"$new_version/" $file
+    sed -i "s/\"version\": \"$version/\"version\": \"$new_version/" $file
     sed -i "s/APP_VERSION: \"$version/APP_VERSION: \"$new_version/" "./.github/workflows/build.yml"
     #sed -i "s/$name_$version/$name_$new_version/" "./README.md"
     #sed -i "s/Build\/v$version/Build\/v$new_version/" "./README.md"
