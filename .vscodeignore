@@ -6,7 +6,6 @@ src/**
 **/*.map
 .gitignore
 tsconfig.json
-vsc-extension-quickstart.md
 TODO
 bump-version.sh
 .github/**
