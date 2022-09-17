@@ -1,17 +1,42 @@
+// Copyright (C) 2022 Sebastien Guerri
+//
+// This file is part of markdown-header.
+//
+// markdown-header is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// any later version.
+//
+// markdown-header is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with markdown-header. If not, see <https://www.gnu.org/licenses/>.
+
 'use strict';
 
 import * as vscode from 'vscode';
 
 import { MarkdownHeaderProvider } from './markdownHeader';
 
+/**
+ * Activate the extension
+ * @param context Extension context
+ */
 export function activate(context: vscode.ExtensionContext)
 {
+	// Create provider
 	const markdownHeaderProvider = new MarkdownHeaderProvider(context);
 	
+	// Init status for existing header
 	vscode.commands.executeCommand('setContext', 'markdownHeader.hasYaml', false);
 
+	// Register provider
 	vscode.window.registerTreeDataProvider('markdownHeader', markdownHeaderProvider);
 	
+	// Register commands
 	vscode.commands.registerCommand('markdownHeader.addHeader', () => markdownHeaderProvider.addHeader());
 	vscode.commands.registerCommand('markdownHeader.refresh', () => markdownHeaderProvider.refresh());
 	vscode.commands.registerCommand('markdownHeader.addItem', () => markdownHeaderProvider.addItem());
