@@ -1,10 +1,10 @@
 {
 	"name": "markdown-header",
 	"displayName": "Markdown Header",
-	"description": "Markdown Header editor",
-	"version": "0.0.7",
+	"description": "Markdown YAML header editor",
+	"version": "0.0.8",
 	"publisher": "sguerri",
-	"license": "MIT",
+	"license": "GPL-3.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/sguerri/vscode-markdown-header"
@@ -67,6 +67,10 @@
 				}
 			},
 			{
+				"command": "markdownHeader.updateTitle",
+				"title": "Update from markdown content"
+			},
+			{
 				"command": "markdownHeader.updateString",
 				"title": "Change value"
 			},
@@ -100,6 +104,11 @@
 				{
 					"command": "markdownHeader.removeItem",
 					"when": "view == markdownHeader && viewItem != 'title'"
+				},
+				{
+					"command": "markdownHeader.updateTitle",
+					"when": "view == markdownHeader && viewItem == 'title'",
+					"group": "inline"
 				},
 				{
 					"command": "markdownHeader.updateString",
@@ -136,6 +145,11 @@
 						"type": "object",
 						"default": {},
 						"description": "Predefined options by header key"
+					},
+					"markdownHeader.initWithId": {
+						"type": "boolean",
+						"default": false,
+						"description": "When creating a new YAML header, add a random id"
 					}
 				}
 			}

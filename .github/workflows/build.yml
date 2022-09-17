@@ -7,7 +7,7 @@ on:
 env:
   APP_USER: sguerri
   APP_NAME: markdown-header
-  APP_VERSION: "0.0.7"
+  APP_VERSION: "0.0.8"
   BUILD_TYPE: Release
 
 jobs:
@@ -33,12 +33,6 @@ jobs:
 #          args: "publish -p $VSCE_TOKEN"
 #        env:
 #          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
-
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
-#          path: ./${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
 
       - name: Release
         uses: fnkr/github-action-ghr@v1

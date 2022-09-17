@@ -2,20 +2,14 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as yaml from 'yaml';
 
-
-interface HeaderItem
-{
-	name: string;
-	value: string;
-}
+import * as utils from './extensionUtils';
+import * as settings from './extensionSettings';
 
 export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 {
+
 	private _onDidChangeTreeData: vscode.EventEmitter<number | undefined> = new vscode.EventEmitter<number | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<number | undefined> = this._onDidChangeTreeData.event;
-
-	private autoRefresh = true;
-	private choices: any = {};
 
 	private editor: vscode.TextEditor | undefined;
 	private header: any = {};
@@ -27,12 +21,9 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 
-		this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
-		this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
-		vscode.workspace.onDidChangeConfiguration(() => {
-			this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
-			this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
-		});
+		settings.load();
+		vscode.workspace.onDidChangeConfiguration(() => settings.load());
+
 		this.onActiveEditorChanged();
 	}
 
@@ -42,33 +33,38 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 			if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
 				const enabled = vscode.window.activeTextEditor.document.languageId === 'markdown';
 				vscode.commands.executeCommand('setContext', 'markdownHeaderEnabled', enabled);
-				if (enabled) {
-					this.refresh();
-				}
+				if (enabled) this.refresh();
+				return;
 			}
-		} else {
-			vscode.commands.executeCommand('setContext', 'markdownHeaderEnabled', false);
 		}
+		vscode.commands.executeCommand('setContext', 'markdownHeaderEnabled', false);
 	}
 
 	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void
 	{
-		if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor?.document.uri.toString()) {
-			for (const change of changeEvent.contentChanges) {
-				this.parseMarkdown();
-				this._onDidChangeTreeData.fire(void 0);
-			}
+		if (settings.autoRefresh && changeEvent.document.uri.toString() === this.editor?.document.uri.toString()) {
+			this.parseMarkdown();
+			this._onDidChangeTreeData.fire(undefined);
 		}
 	}
+
+
+
+
 
 	addHeader(): void
 	{
 		this.editor = vscode.window.activeTextEditor;
 		if (this.editor && this.editor.document) {
 
+			let header = '---\n';
+
+			if (settings.initWithId) {
+				header += `id: ${utils.generateId()}\n`;
+			}
+
 			let text = this.editor.document.getText();
 			let title = this.editor.document.fileName;
-
 			text.split('\n').every(line => {
 				if (line.startsWith('# ')) {
 					title = line.replace('# ', '');
@@ -76,9 +72,12 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 				}
 				return true;
 			});
+			header += `title: ${title}\n`;
+
+			header += '---\n\n';
 
 			this.editor.edit(editBuilder => {
-				editBuilder.insert(new vscode.Position(0, 0), `---\ntitle: ${title}\n---\n\n`);
+				editBuilder.insert(new vscode.Position(0, 0), header);
 				this.refresh();
 			});
 		}
@@ -128,6 +127,10 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		});
 	}
 
+
+
+
+
 	refresh(offset?: number): void
 	{
 		this.parseMarkdown();
@@ -153,7 +156,7 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 			const treeItem: vscode.TreeItem = new vscode.TreeItem(value, vscode.TreeItemCollapsibleState.None);
 			treeItem.description = key;
 			treeItem.iconPath = this.getIcon(typeof value);
-			treeItem.contextValue = key === 'title' ? 'title' : (key === 'date' ? 'date' : 'string');
+			treeItem.contextValue = ['id', 'title', 'date'].includes(key) ? key : 'string';
 			return treeItem;
 		}
 		else if (typeof value === 'boolean')
@@ -191,13 +194,35 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		return Promise.resolve(Array.from(Array(len).keys(), n => n+1));
 	}
 
+
+
+
+	updateTitle(): void
+	{
+		if (!this.editor) return;
+		if (!Object.keys(this.header).includes('title')) return;
+
+		let text = this.editor.document.getText();
+		let title = this.editor.document.fileName;
+		text.split('\n').every(line => {
+			if (line.startsWith('# ')) {
+				title = line.replace('# ', '');
+				return false;
+			}
+			return true;
+		});
+
+		this.header['title'] = title;
+		this.updateMarkdown();
+	}
+
 	updateString(offset: number): void
 	{
 		let key = Object.keys(this.header)[offset - 1];
 		let value = this.header[key];
 		if (typeof value === 'string') {
-			if (Object.keys(this.choices).includes(key) && Array.isArray(this.choices[key])) {
-				vscode.window.showQuickPick(this.choices[key], {
+			if (Object.keys(settings.choices).includes(key) && Array.isArray(settings.choices[key])) {
+				vscode.window.showQuickPick(settings.choices[key], {
 					placeHolder: `Select value for ${key}`
 				}).then(value => {
 					if (value) {
@@ -252,8 +277,8 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		if (typeof value === 'number') {
 			let min : number | undefined = undefined;
 			let max : number | undefined = undefined;
-			if (Object.keys(this.choices).includes(key)) {
-				let details = this.choices[key];
+			if (Object.keys(settings.choices).includes(key)) {
+				let details = settings.choices[key];
 				if (typeof details === 'object') {
 					if (Object.keys(details).includes('min')) {
 						min = details['min'];
@@ -289,6 +314,11 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 			});
 		}
 	}
+
+
+
+
+
 
 	private parseMarkdown(): void
 	{
@@ -330,6 +360,9 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 			});
 		}
 	}
+
+
+
 
 	private getIcon(type: string): any
 	{
