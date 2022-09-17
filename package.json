@@ -2,7 +2,7 @@
 	"name": "markdown-header",
 	"displayName": "Markdown Header",
 	"description": "Markdown Header editor",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "sguerri",
 	"license": "MIT",
 	"repository": {
