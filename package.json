@@ -1,0 +1,168 @@
+{
+	"name": "markdown-header",
+	"displayName": "Markdown Header",
+	"description": "Markdown Header editor",
+	"version": "0.0.0",
+	"publisher": "sguerri",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sguerri/vscode-markdown-header"
+	},
+	"engines": {
+		"vscode": "^1.71.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onView:markdownHeader",
+		"onView:fileExplorer",
+		"onLanguage:markdown"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "markdownHeader",
+					"name": "Markdown Header",
+					"when": "markdownHeaderEnabled"
+				}
+			]
+		},
+		"viewsWelcome": [
+			{
+			  "view": "markdownHeader",
+			  "contents": "No YAML header in the file.\n[Add Header](command:markdownHeader.addHeader)"
+			}
+		],
+		"commands": [
+			{
+				"command": "markdownHeader.addHeader",
+				"title": "Add Header"
+			},
+			{
+				"command": "markdownHeader.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "markdownHeader.addItem",
+				"title": "Add item",
+				"icon": {
+					"light": "resources/light/add.svg",
+					"dark": "resources/dark/add.svg"
+				}
+			},
+			{
+				"command": "markdownHeader.removeItem",
+				"title": "Remove item",
+				"icon": {
+					"light": "resources/light/trash.svg",
+					"dark": "resources/dark/trash.svg"
+				}
+			},
+			{
+				"command": "markdownHeader.updateString",
+				"title": "Change value"
+			},
+			{
+				"command": "markdownHeader.updateDate",
+				"title": "Change value"
+			},
+			{
+				"command": "markdownHeader.updateBoolean",
+				"title": "Change value"
+			},
+			{
+				"command": "markdownHeader.updateNumber",
+				"title": "Change value"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "markdownHeader.refresh",
+					"when": "view == markdownHeader",
+					"group": "navigation"
+				},
+				{
+					"command": "markdownHeader.addItem",
+					"when": "view == markdownHeader && markdownHeader.hasYaml",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "markdownHeader.removeItem",
+					"when": "view == markdownHeader && viewItem != 'title'"
+				},
+				{
+					"command": "markdownHeader.updateString",
+					"when": "view == markdownHeader && viewItem == 'string'",
+					"group": "inline"
+				},
+				{
+					"command": "markdownHeader.updateDate",
+					"when": "view == markdownHeader && viewItem == 'date'",
+					"group": "inline"
+				},
+				{
+					"command": "markdownHeader.updateBoolean",
+					"when": "view == markdownHeader && viewItem == 'boolean'",
+					"group": "inline"
+				},
+				{
+					"command": "markdownHeader.updateNumber",
+					"when": "view == markdownHeader && viewItem == 'number'",
+					"group": "inline"
+				}
+			]
+		},
+		"configuration": [
+			{
+				"title": "Markdown Header",
+				"properties": {
+					"markdownHeader.autorefresh": {
+						"type": "boolean",
+						"default": true,
+						"description": "Automatic refresh of header panel on file modification"
+					},
+					"markdownHeader.choices": {
+						"type": "object",
+						"default": {},
+						"description": "Predefined options by header key"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"package": "vsce package"
+	},
+	"devDependencies": {
+		"@types/mkdirp": "^0.5.2",
+		"@types/node": "^16.11.7",
+		"@types/rimraf": "^2.0.2",
+		"@types/vscode": "^1.67.0",
+		"@types/yaml": "^1.9.7",
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
+		"eslint": "^8.13.0",
+		"typescript": "^4.7.2"
+	},
+	"dependencies": {
+		"minimist": "^1.2.6",
+		"mkdirp": "^0.5.1",
+		"rimraf": "^2.6.2",
+		"yaml": "^2.1.1"
+	}
+}

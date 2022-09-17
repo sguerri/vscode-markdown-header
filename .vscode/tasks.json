@@ -1,0 +1,74 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "watch",
+            "problemMatcher": "$tsc-watch",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "never"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "bump-minor",
+            "type": "shell",
+            "command": "./bump-version.sh minor"
+        },
+        {
+            "label": "bump-major",
+            "type": "shell",
+            "command": "./bump-version.sh major"
+        },
+        {
+            "label": "bump-patch",
+            "type": "shell",
+            "command": "./bump-version.sh patch"
+        },
+        {
+            "label": "git-release",
+            "type": "shell",
+            "command": "cmd git-release --no-log `./bump-version.sh get`"
+        },
+        {
+            "label": "publish",
+            "type": "shell",
+            "command": "cmd git-publish",
+            "options": { "statusbar": { "hide": false } }
+        },
+        {
+            "label": "patch",
+            "dependsOrder": "sequence",
+            "dependsOn": [ "bump-patch", "git-release" ],
+            "options": { "statusbar": { "hide": false } }
+        },
+        {
+            "label": "minor",
+            "dependsOrder": "sequence",
+            "dependsOn": [ "bump-minor", "git-release" ],
+            "options": { "statusbar": { "hide": false } }
+        },
+        {
+            "label": "major",
+            "dependsOrder": "sequence",
+            "dependsOn": [ "bump-major", "git-release" ],
+            "options": { "statusbar": { "hide": false } }
+        },
+        {
+            "label": "feature-new",
+            "type": "shell",
+            "command": "cmd git-feature"
+        },
+        {
+            "label": "feature-close_current",
+            "type": "shell",
+            "command": "cmd git-feature-close-current"
+        }
+    ]
+}
