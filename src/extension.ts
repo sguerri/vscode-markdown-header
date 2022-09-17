@@ -21,14 +21,22 @@ import * as vscode from 'vscode';
 
 import { MarkdownHeaderProvider } from './markdownHeader';
 
+/**
+ * Activate the extension
+ * @param context Extension context
+ */
 export function activate(context: vscode.ExtensionContext)
 {
+	// Create provider
 	const markdownHeaderProvider = new MarkdownHeaderProvider(context);
 	
+	// Init status for existing header
 	vscode.commands.executeCommand('setContext', 'markdownHeader.hasYaml', false);
 
+	// Register provider
 	vscode.window.registerTreeDataProvider('markdownHeader', markdownHeaderProvider);
 	
+	// Register commands
 	vscode.commands.registerCommand('markdownHeader.addHeader', () => markdownHeaderProvider.addHeader());
 	vscode.commands.registerCommand('markdownHeader.refresh', () => markdownHeaderProvider.refresh());
 	vscode.commands.registerCommand('markdownHeader.addItem', () => markdownHeaderProvider.addItem());
