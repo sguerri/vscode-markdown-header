@@ -14,6 +14,7 @@ export function activate(context: vscode.ExtensionContext)
 	vscode.commands.executeCommand('setContext', 'markdownHeader.hasYaml', false);
 
 	vscode.window.registerTreeDataProvider('markdownHeader', markdownHeaderProvider);
+	
 	vscode.commands.registerCommand('markdownHeader.addHeader', () => markdownHeaderProvider.addHeader());
 	vscode.commands.registerCommand('markdownHeader.refresh', () => markdownHeaderProvider.refresh());
 	vscode.commands.registerCommand('markdownHeader.addItem', () => markdownHeaderProvider.addItem());

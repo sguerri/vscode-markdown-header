@@ -2,20 +2,16 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as yaml from 'yaml';
 
-
-interface HeaderItem
-{
-	name: string;
-	value: string;
-}
+import * as settings from './extensionSettings';
 
 export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 {
+
 	private _onDidChangeTreeData: vscode.EventEmitter<number | undefined> = new vscode.EventEmitter<number | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<number | undefined> = this._onDidChangeTreeData.event;
 
-	private autoRefresh = true;
-	private choices: any = {};
+	//private autoRefresh = true;
+	//private choices: any = {};
 
 	private editor: vscode.TextEditor | undefined;
 	private header: any = {};
@@ -27,12 +23,15 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 
-		this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
-		this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
+		//this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
+		//this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
+		settings.load();
 		vscode.workspace.onDidChangeConfiguration(() => {
-			this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
-			this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
+			settings.load();
+			//this.autoRefresh = vscode.workspace.getConfiguration('markdownHeader').get('autorefresh', false);
+			//this.choices = vscode.workspace.getConfiguration('markdownHeader').get('choices', {});
 		});
+
 		this.onActiveEditorChanged();
 	}
 
@@ -53,7 +52,8 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 
 	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void
 	{
-		if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor?.document.uri.toString()) {
+		//if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor?.document.uri.toString()) {
+		if (settings.autoRefresh && changeEvent.document.uri.toString() === this.editor?.document.uri.toString()) {
 			for (const change of changeEvent.contentChanges) {
 				this.parseMarkdown();
 				this._onDidChangeTreeData.fire(void 0);
@@ -196,8 +196,10 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		let key = Object.keys(this.header)[offset - 1];
 		let value = this.header[key];
 		if (typeof value === 'string') {
-			if (Object.keys(this.choices).includes(key) && Array.isArray(this.choices[key])) {
-				vscode.window.showQuickPick(this.choices[key], {
+			//if (Object.keys(this.choices).includes(key) && Array.isArray(this.choices[key])) {
+			//	vscode.window.showQuickPick(this.choices[key], {
+			if (Object.keys(settings.choices).includes(key) && Array.isArray(settings.choices[key])) {
+				vscode.window.showQuickPick(settings.choices[key], {
 					placeHolder: `Select value for ${key}`
 				}).then(value => {
 					if (value) {
@@ -252,8 +254,10 @@ export class MarkdownHeaderProvider implements vscode.TreeDataProvider<number>
 		if (typeof value === 'number') {
 			let min : number | undefined = undefined;
 			let max : number | undefined = undefined;
-			if (Object.keys(this.choices).includes(key)) {
-				let details = this.choices[key];
+			//if (Object.keys(this.choices).includes(key)) {
+			//	let details = this.choices[key];
+			if (Object.keys(settings.choices).includes(key)) {
+				let details = settings.choices[key];
 				if (typeof details === 'object') {
 					if (Object.keys(details).includes('min')) {
 						min = details['min'];
