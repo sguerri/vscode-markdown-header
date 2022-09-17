@@ -6,13 +6,12 @@
             "name": "Launch Extension",
             "type": "extensionHost",
             "request": "launch",
-            "runtimeExecutable": "${execPath} '/home/sebastien/Projets/SGTools/vscodium/markdown-header-test'",
+            "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceRoot}",
                 "--enable-proposed-api",
                 "vscode-samples.custom-view-samples"
             ],
-            "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [
                 "${workspaceRoot}/out/src/**/*.js"
@@ -23,7 +22,6 @@
             "type": "node",
             "request": "attach",
             "name": "Attach to Extension Host",
-            "protocol": "inspector",
             "port": 5870,
             "restart": true,
             "outFiles": [
