@@ -34,6 +34,8 @@
 
 #todo
 
+special keys: 'id', 'title', 'date'
+
 ## Build
 
 #todo
