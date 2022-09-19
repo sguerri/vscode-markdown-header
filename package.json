@@ -15,6 +15,7 @@
 	"categories": [
 		"Other"
 	],
+	"keywords": [ "markdown", "header", "yaml" ],
 	"activationEvents": [
 		"onView:markdownHeader",
 		"onView:fileExplorer",
