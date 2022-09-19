@@ -22,37 +22,122 @@ I will enhance the extension as per my daily usage or others' feedbacks.
 * Switch boolean value true <-> false
 
 **Roadmap**
-* Edit array items
-* Edit float numbers (currently check value with parseInt)
+* See [TODO](https://github.com/sguerri/vscode-markdown-header/blob/main/TODO)
 
 ---
 
 - [Welcome to markdown-header](#welcome-to-markdown-header)
-  * [Installation](#installation)
-  * [Usage](#usage)
-  * [Build](#build)
-  * [Dependencies](#dependencies)
-  * [Author](#author)
-  * [Issues](#issues)
-  * [License](#license)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Create Header](#create-header)
+    - [Add item](#add-item)
+    - [Remove item](#remove-item)
+    - [Update item](#update-item)
+    - [Specific updates](#specific-updates)
+  - [Settings](#settings)
+  - [Dependencies](#dependencies)
+  - [Author](#author)
+  - [Issues](#issues)
+  - [License](#license)
 
 ## Installation
 
-#todo
+Download latest vsix file in the [releases](https://github.com/sguerri/vscode-markdown-header/releases) section.
+
+Go to `Extensions > Install from VSIX...` and select downloaded file.
 
 ## Usage
 
-#todo
+### Create Header
 
-special keys: 'id', 'title', 'date'
+If no header is detected, this action adds a new YAML header at top of the file.
 
-## Build
+The file is parsed. If it has a title (`# ...` format), it will be added to `title` header item. Otherwise filename will be added as `title`.
 
-#todo
+If option `markdownHeader.initWithId` is set to `true`, a random id will be generated.
+
+### Add item
+
+The <kbd>+</kbd> button creates a new header item.
+
+An item cannot be created for an already existing key.
+
+Item value will be parsed as :
+ - string (default)
+ - boolean (if `true` of `false` is entered)
+ - integer (if `parseInt` is no error)
+
+### Remove item
+
+Right click on a header item to remove it. Confirmation will be asked.
+
+`title` header cannot be removed through the extension.
+
+### Update item
+
+A button `Change value` is available to modify an item value.
+
+Data to be entered will have to be complient with previous value type.
+
+**Case of boolean**
+
+Nothing will be prompted. The boolean value switches to reversed value.
+
+**Case of title**
+
+Title cannot be manually modified through the extension. However, if you modify the actual file title (`# ...`), it is possible to update the value in header by using the `Update from markdown context` button.
+
+**Case of date**
+
+If the item key is `date`, a date will be asked.
+
+### Specific updates
+
+It is possible to create specific rules for input validation, by updating the global or project `settings.json` file.
+
+**Several choices**
+
+By adding an array of strings to the `markdownHeader.choices` object, selection of one of these items will be asked instead of free input.
+
+Example, for the header item with key `test`, the settings can be:
+```json
+{
+	"markdownHeader.choices": {
+		"test": [ "option1","option2", "option3" ]
+	}
+}
+```
+
+**Minimum or maximum value of interger**
+
+By adding a specific object to the `markdownHeader.choices` object, the input of an integer can be restrained to a specific range.
+
+Example, for the header item with key `test`, the settings can be:
+```json
+{
+	"markdownHeader.choices": {
+		"test": {
+			"min": 1,
+			"max": 10
+		}
+	}
+}
+```
+
+Either `min`, `max` or both options can be defined.
+
+## Settings
+
+|||
+|:--|:--|
+|`markdownHeader.autorefresh`|If `true`, header details will automatically update while file modifications|
+|`markdownHeader.initWithId`|If `true`, when creating a new YAML header a random id field will be added|
+|`markdownHeader.choices`|See the [Specific updates](#specific-updates) section|
 
 ## Dependencies
 
 - [yaml](https://www.npmjs.com/package/yaml)
+- [vscode-icons](https://github.com/microsoft/vscode-icons)
 
 ## Author
 
