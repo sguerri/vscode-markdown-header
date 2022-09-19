@@ -7,13 +7,23 @@
 
 > Markdown YAML header editor for vscodium and vscode
 
-#todo
+This is an extension for [vscodium](https://vscodium.com/) and [vscode](https://code.visualstudio.com/).
+
+For markdown files having a YAML header, it displays a sidebar with header details.
+
+I will enhance the extension as per my daily usage or others' feedbacks.
 
 **Main features**
-* #todo
+* Display header items by type
+* Add a YAML header if not existing
+* Add / Remove header item
+* Update value depending the header type
+* Choice selection per header item as per global / project settings
+* Switch boolean value true <-> false
 
 **Roadmap**
-* #todo
+* Edit array items
+* Edit float numbers (currently check value with parseInt)
 
 ---
 
@@ -42,7 +52,7 @@ special keys: 'id', 'title', 'date'
 
 ## Dependencies
 
-#todo
+- [yaml](https://www.npmjs.com/package/yaml)
 
 ## Author
 
