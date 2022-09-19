@@ -9,3 +9,4 @@ tsconfig.json
 TODO
 bump-version.sh
 .github/**
+node_modules
