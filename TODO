@@ -2,7 +2,6 @@
 [ ] Date: Change date format for validation
 [ ] Edit array
 [ ] Numbers not int
-[ ] Publish
 [ ] Add changelog
 [ ] Add extension resources
 [x] List of items for selection in project config file @done(22-09-16 18:02)
@@ -11,4 +10,5 @@
 [x] Comments @done(22-09-17 22:52)
 [x] Bundle extension https://aka.ms/vscode-bundle-extension @done(22-09-19 20:35)
 [x] Readme @done(22-09-19 21:43)
+[x] Publish @done(22-09-20 15:54)
 
