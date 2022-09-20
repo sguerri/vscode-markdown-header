@@ -7,7 +7,7 @@ on:
 env:
   APP_USER: sguerri
   APP_NAME: markdown-header
-  APP_VERSION: "0.1.0"
+  APP_VERSION: "0.1.1"
   BUILD_TYPE: Release
 
 jobs:
@@ -33,6 +33,9 @@ jobs:
 #          args: "publish -p $VSCE_TOKEN"
 #        env:
 #          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+      - name: Publish to open-vsx
+        run: npm run ovsx -- --pat ${{ secrets.OPENVSX_TOKEN }} publish ${{env.APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
 
       - name: Release
         uses: fnkr/github-action-ghr@v1
