@@ -34,6 +34,9 @@ jobs:
 #        env:
 #          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
+      - name: Publish to open-vsx
+        run: npm run ovsx -- --pat ${{ secrets.OPENVSX_TOKEN }} publish ${{env.APP_USER}}.${{env.APP_NAME}}-${{env.APP_VERSION}}.vsix
+
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:
