@@ -1,7 +1,7 @@
 # Welcome to markdown-header
 
 [![](https://badgen.net/github/release/sguerri/vscode-markdown-header)](https://github.com/sguerri/vscode-markdown-header/releases/)
-[![](https://img.shields.io/github/workflow/status/sguerri/vscode-markdown-header/Build/v0.1.0)](https://github.com/sguerri/vscode-markdown-header/actions/workflows/build.yml)
+[![](https://img.shields.io/github/workflow/status/sguerri/vscode-markdown-header/Build/v0.1.1)](https://github.com/sguerri/vscode-markdown-header/actions/workflows/build.yml)
 [![](https://badgen.net/github/license/sguerri/vscode-markdown-header)](https://www.gnu.org/licenses/)
 [![](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](#)
 
